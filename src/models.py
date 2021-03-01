@@ -3,10 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+    favs = db.relationship("Favorites", lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -21,6 +22,7 @@ class User(db.Model):
 
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey("users.id"))
     name = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
